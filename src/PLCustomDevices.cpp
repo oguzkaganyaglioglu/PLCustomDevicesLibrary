@@ -47,6 +47,10 @@ void PLCustomDevices::callback(char *topic, uint8_t *message, uint16_t length)
     if (customCallback)
     {
         customCallback(topic, message, length);
+        if (!noAutoResponse)
+        {
+            sendResponse();
+        }
     }
 }
 
@@ -61,8 +65,9 @@ bool PLCustomDevices::sendResponse()
     return result;
 }
 
-PLCustomDevices &PLCustomDevices::setMqttCallback(CUSTOM_CALLBACK_SIGNATURE)
+PLCustomDevices &PLCustomDevices::setMqttCallback(CUSTOM_CALLBACK_SIGNATURE, bool noResponse)
 {
+    this->noAutoResponse = noResponse;
     this->customCallback = customCallback;
     return *this;
 }
